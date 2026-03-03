@@ -1,10 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const Hero = () => {
   const [showModal, setShowModal] = useState(false);
+  const [current, setCurrent] = useState(0);
+
+  const images = [
+    "https://res.cloudinary.com/dcrgqlkhu/image/upload/f_auto,q_auto,w_800/243853713_1555777574775278_2604104388482119776_n_sebk1x.jpg",
+    "https://res.cloudinary.com/dcrgqlkhu/image/upload/f_auto,q_auto,w_800/243763097_1555777388108630_2618775664388643504_n_waxph7.jpg",
+    "https://res.cloudinary.com/dcrgqlkhu/image/upload/f_auto,q_auto,w_800/347402879_1709170269541469_5165644923325860848_n_gcka6p.jpg",
+    "https://res.cloudinary.com/dcrgqlkhu/image/upload/f_auto,q_auto,w_800/cld-sample-2.jpg"
+  ];
+
+  // Auto-slide toutes les 5s
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const prevSlide = () => setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  const nextSlide = () => setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
 
   const handleSendPriere = async (e) => {
     e.preventDefault();
@@ -31,7 +50,6 @@ const Hero = () => {
     <>
       {/* SECTION HERO */}
       <div className="relative min-h-screen flex flex-col items-center justify-center text-white px-4 pt-28 pb-12 overflow-hidden">
-        
         <div className="absolute inset-0 z-0">
           <img src="/cpc1.jpg" alt="Fond" className="w-full h-full object-cover grayscale opacity-70" />
           <div className="absolute inset-0 bg-blue-900/90"></div>
@@ -47,10 +65,9 @@ const Hero = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-amber-500"></span>
             </span>
-            <span className="text-amber-400 text-[10px] md:text-xs font-bold uppercase tracking-widest text-center">Culte en direct : Dimanche 08h30</span>
+            <span className="text-amber-400 text-[10px] md:text-xs font-bold uppercase tracking-widest text-center">Culte en direct : Dimanche 07h00</span>
           </div>
 
-          {/* CONTENEUR ANIMATION STABILISÉ */}
           <div className="text-center mb-8 w-full max-w-3xl">
             <div className="min-h-[100px] md:min-h-[120px] flex items-center justify-center">
               <h2 className="text-xl md:text-4xl font-extrabold tracking-tight px-2 leading-tight">
@@ -64,7 +81,6 @@ const Hero = () => {
                 />
               </h2>
             </div>
-            
             <button 
               onClick={() => setShowModal(true)}
               className="mt-6 bg-amber-500 text-blue-900 font-black px-8 md:px-10 py-4 rounded-2xl shadow-2xl hover:bg-amber-400 transition transform active:scale-95 text-sm md:text-base"
@@ -73,7 +89,6 @@ const Hero = () => {
             </button>
           </div>
 
-          {/* DASHBOARD DES HORAIRES RECADRÉ */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full mt-4">
             {[
               { jour: "Dimanche", sujet: "Culte d'action de grace", heure: "07h00 — 11h00" },
@@ -89,64 +104,198 @@ const Hero = () => {
           </div>
         </div>
       </div>
+{/* SECTION A PROPOS */}
+<section className="py-8 md:py-16 bg-gray-50 px-4 sm:px-6">
+  <div className="max-w-6xl mx-auto">
 
-      {/* SECTION VISION */}
-      <section className="py-16 md:py-24 bg-white px-6">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 items-center">
-          <div className="relative">
-            <div className="aspect-photo bg-gray-200 rounded-3xl overflow-hidden shadow-2xl border-2 md:border-4 border-gray-50">
-               <img src="/DSC_3902.jpg" alt="Église" className="w-full h-full object-cover" />
-            </div>
-            
-          </div>
-          <div>
-            <h2 className="text-amber-500 font-bold uppercase tracking-widest text-xs md:sm mb-4">Qui sommes-nous ?</h2>
-            <h3 className="text-2xl md:text-4xl font-black text-blue-900 mb-6 leading-tight">Le Ministère la Puissance du Nom de Jésus-Christ</h3>
-            <p className="text-gray-600 mb-8 leading-relaxed text-sm md:text-base">
-              <div className="absolute -bottom-6 -right-6 bg-blue-900 text-white p-6 rounded-2xl hidden md:block shadow-xl">
-              <p className="text-3xl font-bold italic">15+</p>
-              <p className="text-[10px] uppercase font-bold text-blue-300">Années de Ministère</p>
-            </div>
-              La MPNJC est dédiée à l'enseignement pur de la parole de Dieu et à la manifestation de l'Esprit. Notre mission est de préparer un peuple saint pour la seconde venue du Seigneur <strong>Jésus-Christ</strong>.
-            </p>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 font-bold text-gray-800 italic text-sm md:text-base">✓ Enseignement Biblique Pur</div>
-              <div className="flex items-center gap-4 font-bold text-gray-800 italic text-sm md:text-base">✓ Communion Fraternelle Réelle</div>
-            </div>
+    {/* ENTÊTE */}
+    <div className="mb-12 text-center">
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+        Notre Église en images
+      </h2>
+      <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+        Découvrez les lieux et les moments qui font vivre notre communauté
+      </p>
+    </div>
+
+    {/* CONTENU */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+
+      {/* CARROUSEL */}
+      <div className="relative w-full">
+
+        <div
+          className="
+            relative
+            aspect-[3/4] sm:aspect-[4/3] lg:aspect-[16/9]
+            bg-gray-900/5
+            rounded-2xl md:rounded-3xl
+            overflow-hidden
+            shadow-xl
+            border border-gray-100
+          "
+        >
+          {images.map((src, idx) => (
+            <img
+              key={idx}
+              src={src}
+              alt="Église"
+              loading="lazy"
+              className={`
+  absolute inset-0
+  w-full h-full
+  object-cover lg:object-contain
+  transition-opacity duration-700 ease-in-out
+  ${idx === current ? "opacity-100" : "opacity-0"}
+`}
+            />
+          ))}
+        </div>
+
+        {/* BOUTON PRECEDENT */}
+        <button
+          onClick={prevSlide}
+          className="
+            absolute left-2 md:left-4 top-1/2 -translate-y-1/2
+            bg-white/70 hover:bg-white
+            text-blue-900
+            rounded-full
+            w-9 h-9 md:w-11 md:h-11
+            flex items-center justify-center
+            shadow
+            transition
+          "
+          aria-label="Image précédente"
+        >
+          ‹
+        </button>
+
+        {/* BOUTON SUIVANT */}
+        <button
+          onClick={nextSlide}
+          className="
+            absolute right-2 md:right-4 top-1/2 -translate-y-1/2
+            bg-white/70 hover:bg-white
+            text-blue-900
+            rounded-full
+            w-9 h-9 md:w-11 md:h-11
+            flex items-center justify-center
+            shadow
+            transition
+          "
+          aria-label="Image suivante"
+        >
+          ›
+        </button>
+
+        {/* INDICATEURS */}
+        <div className="absolute bottom-3 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+          {images.map((_, idx) => (
+            <span
+              key={idx}
+              onClick={() => setCurrent(idx)}
+              className={`
+                cursor-pointer
+                w-2.5 h-2.5 md:w-3 md:h-3
+                rounded-full
+                transition
+                ${
+                  idx === current
+                    ? "bg-amber-500 scale-110"
+                    : "bg-white/60 hover:bg-white"
+                }
+              `}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* TEXTE À DROITE */}
+      <div className="text-gray-700 text-base md:text-lg leading-relaxed mt-6 lg:mt-0">
+        <p className="mb-4">
+          Notre église est un lieu de rassemblement, de prière et de partage.
+          À travers ces images, découvrez son architecture, ses célébrations
+          et la vie de la communauté.
+        </p>
+        <p>
+          Chaque moment capturé témoigne de la foi, de l’engagement et de la
+          fraternité qui nous unissent.
+        </p>
+      </div>
+
+    </div>
+
+    {/* TEXTE À PROPOS */}
+    <div className="mt-20">
+      <h2 className="text-amber-500 font-bold uppercase tracking-widest text-xs mb-4">
+        Qui sommes-nous ?
+      </h2>
+
+      <h3 className="text-2xl md:text-4xl font-black text-blue-900 mb-6 leading-tight">
+        Le Ministère la Puissance du Nom de Jésus-Christ
+      </h3>
+
+      <div className="text-gray-600 mb-8 leading-relaxed text-sm md:text-base">
+        La MPNJC est dédiée à l'enseignement pur de la parole de Dieu et à la
+        manifestation de l'Esprit. Notre mission est de préparer un peuple saint
+        pour la seconde venue du Seigneur <strong>Jésus-Christ</strong>.
+      </div>
+
+      <div className="space-y-4">
+        <div className="flex items-center gap-3 font-bold text-gray-800 italic text-sm md:text-base">
+          ✓ Enseignement Biblique Pur
+        </div>
+        <div className="flex items-center gap-3 font-bold text-gray-800 italic text-sm md:text-base">
+          ✓ Communion Fraternelle Réelle
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  {/* NOUS RENDRE VISITE */}
+      <div className=" py-6 text-center text-blue-900 font-black text-[10px] md:text-xs tracking-[0.2em] italic px-4">      
+        <h4 className="text-blue-900 font-bold mb-2">Nous rendre visite</h4>
+        <p className="text-gray-700 text-sm">
+          8B Croisement Kapela-Kimwenza, Yolo-Sud, Kalamu / Kinshasa, RDC
+        </p>
+        <a
+          href="https://goo.gl/maps/YOUR_GOOGLE_MAPS_LINK"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block mt-3 bg-amber-500 text-blue-900 font-bold px-4 py-2 rounded-xl hover:bg-amber-400 transition"
+        >
+          Voir sur la carte
+        </a>
+      </div>
+</section>
+
+
+      {/* SECTION TÉMOIGNAGES */}
+      <section className="relative py-24 md:py-32 overflow-hidden flex items-center justify-center">
+        <div className="absolute inset-0 z-0">
+          <img src="/cpc2.jpg" alt="Pasteur" className="w-full h-full object-cover grayscale opacity-50" />
+          <div className="absolute inset-0 bg-blue-900/90"></div>
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-white text-center">
+          <span className="text-2xl md:text-4xl text-amber-500 font-serif opacity-90 mb-2 block italic">
+            "Ce que disent nos fidèles"
+          </span>
+          <div className="min-h-[180px] md:min-h-[160px] flex items-center justify-center">
+            <TypeAnimation
+              sequence={[
+                '"La MPNJC est une famille où l\'on grandit réellement." — Fr. Marc Kabongo.', 3000,
+                '"Ma vie de prière a totalement changé depuis mon arrivée au Ministère la Puissance." — Sr. Sarah Luwangu.', 3000,
+                '"Un enseignement pur qui restaure l\'âme et le corps." — Fr. David Mande.', 3000,
+              ]}
+              wrapper="p" 
+              repeat={Infinity} 
+              className="text-lg md:text-3xl font-medium italic leading-relaxed"
+            />
           </div>
         </div>
       </section>
 
-      {/* SECTION TÉMOIGNAGES - Stabilisée pour éviter le layout shift */}
-<section className="relative py-24 md:py-32 overflow-hidden flex items-center justify-center">
-  <div className="absolute inset-0 z-0">
-    {/* Correction du chemin de l'image pour le dossier public */}
-    <img src="/cpc2.jpg" alt="Pasteur" className="w-full h-full object-cover grayscale opacity-50" />
-    <div className="absolute inset-0 bg-blue-900/90"></div>
-  </div>
-  
-  <div className="relative z-10 max-w-4xl mx-auto px-6 text-white text-center">
-    <span className="text-2xl md:text-4xl text-amber-500 font-serif opacity-90 mb-2 block italic">
-      "Ce que disent nos fidèles"
-    </span>
-    
-    {/* Conteneur avec hauteur fixe pour stabiliser le texte qui change */}
-    <div className="min-h-[180px] md:min-h-[160px] flex items-center justify-center">
-      <TypeAnimation
-        sequence={[
-          '"La MPNJC est une famille où l\'on grandit réellement." — Fr. Marc Kabongo.', 3000,
-          '"Ma vie de prière a totalement changé depuis mon arrivée au Ministère la Puissance." — Sr. Sarah Luwangu.', 3000,
-          '"Un enseignement pur qui restaure l\'âme et le corps." — Fr. David Mande.', 3000,
-        ]}
-        wrapper="p" 
-        repeat={Infinity} 
-        className="text-lg md:text-3xl font-medium italic leading-relaxed"
-      />
-    </div>
-  </div>
-</section>
-
-      {/* SECTION FORMULAIRE - Padding et grid adaptés */}
+      {/* SECTION FORMULAIRE */}
       <section className="py-10 md:py-24 bg-white px-4">
         <div className="max-w-4xl mx-auto px-2">
           <div className="bg-gray-50 border-2 border-dashed border-blue-200 rounded-[2rem] md:rounded-[3rem] p-4 md:p-16 shadow-inner text-center">
@@ -164,7 +313,7 @@ const Hero = () => {
         </div>
       </section>
 
-      {/* MODAL - Taille adaptée */}
+      {/* MODAL */}
       {showModal && (
         <div className="fixed inset-0 bg-blue-950/90 backdrop-blur-md z-[100] flex items-center justify-center p-4">
           <div className="bg-white rounded-[2rem] md:rounded-[3rem] p-4 md:p-10 max-w-md w-full shadow-2xl relative">
@@ -179,11 +328,7 @@ const Hero = () => {
           </div>
         </div>
       )}
-
-      {/* Footer Donation (Inchangé mais utile) */}
-      <div className="bg-amber-500 py-6 text-center text-blue-900 font-black uppercase text-[10px] md:text-xs tracking-[0.2em] italic px-4">
-        Soutenez l'œuvre de Dieu — <button onClick={() => window.location.href='/don'} className="underline decoration-2 underline-offset-4">Faire un don maintenant</button>
-      </div>
+      
     </>
   );
 };
